@@ -67,7 +67,7 @@ def load_data(filename):
     # Read data from csv file
     with open(filename) as f:
         reader = csv.DictReader(f)
-        # next(reader)
+
         for line in reader:
             evidence_list = []
             # Convert the list of evidence values to the appropriate type and append to the evidence list
@@ -103,7 +103,14 @@ def train_model(evidence, labels):
     Given a list of evidence lists and a list of labels, return a
     fitted k-nearest neighbor model (k=1) trained on the data.
     """
-    raise NotImplementedError
+    # Create a KNN model
+    model = KNeighborsClassifier(n_neighbors=1)
+    
+    # Fit model with our training data
+    model.fit(evidence, labels)
+
+    return model
+    # raise NotImplementedError
 
 
 def evaluate(labels, predictions):
