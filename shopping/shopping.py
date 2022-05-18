@@ -59,7 +59,43 @@ def load_data(filename):
     labels should be the corresponding list of labels, where each label
     is 1 if Revenue is true, and 0 otherwise.
     """
-    raise NotImplementedError
+    evidence = []
+    labels = []
+    # We will use this list as mapping for months
+    MONTHS = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'June', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec']
+
+    # Read data from csv file
+    with open(filename) as f:
+        reader = csv.DictReader(f)
+        # next(reader)
+        for line in reader:
+            evidence_list = []
+            # Convert the list of evidence values to the appropriate type and append to the evidence list
+            evidence_list.append(int(line['Administrative']))
+            evidence_list.append(float(line['Administrative_Duration']))
+            evidence_list.append(int(line['Informational']))
+            evidence_list.append(float(line['Informational_Duration']))
+            evidence_list.append(int(line['ProductRelated']))
+            evidence_list.append(float(line['ProductRelated_Duration']))
+            evidence_list.append(float(line['BounceRates']))
+            evidence_list.append(float(line['ExitRates']))
+            evidence_list.append(float(line['PageValues']))
+            evidence_list.append(float(line['SpecialDay']))
+            evidence_list.append((MONTHS.index(line['Month'])))
+            evidence_list.append(int(line['OperatingSystems']))
+            evidence_list.append(int(line['Browser']))
+            evidence_list.append(int(line['Region']))
+            evidence_list.append(int(line['TrafficType']))
+            visitor_type = 1 if line['VisitorType'] == 'Returning_Visitor' else 0
+            evidence_list.append(visitor_type)
+            evidence_list.append(0 if line['Weekend'] == 'FALSE' else 1)
+            evidence.append(evidence_list)
+            
+            # Append the revenue value to 'labels'
+            labels.append(0 if line['Revenue'] == 'FALSE' else 1)
+
+    return (evidence, labels)
+    # raise NotImplementedError
 
 
 def train_model(evidence, labels):
